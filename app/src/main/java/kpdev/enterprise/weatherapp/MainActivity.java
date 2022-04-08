@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     // รับข้อมูลชื่อของเมือง
     private String getCityName(double longitude, double latitude){
-        String cityName = "Not found!";
+        String cityName = "Bangkok";
         Geocoder gcd = new Geocoder(getBaseContext() , Locale.getDefault());
         try{
             List<Address> addresses = gcd.getFromLocation(latitude,longitude , 20);
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     if(city != null && !city.equals("")) {
                         cityName = city;
                     } else {
-                        Log.e("TAG" , "CITY NOT FOUND Latitude =" + latitude + " Longitude = " + longitude);
+                        Log.d("TAG" , "CITY NOT FOUND Latitude = " + latitude + " Longitude = " + longitude);
                         Toast.makeText(this , "User City Not Found!!" , Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -242,10 +242,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if (locationManager == null)
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                         GPS_TIME_INTERVAL, GPS_DISTANCE, this);
             }
         }
