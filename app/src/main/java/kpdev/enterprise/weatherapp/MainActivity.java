@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private void getWeatherInfo(String cityName){
         // เรียกใช้งาน API
         // กำหนด path ของ API
-        String url = "http://api.weatherapi.com/v1/current.json?key=102deb83cf914ed596273713220804&q="+cityName+"&aqi=no";
+        String url = "http://api.weatherapi.com/v1/forecast.json?key=102deb83cf914ed596273713220804&q="+cityName+"&days=1&aqi=no&alerts=no";
 
         cityNameTV.setText(cityName);
 
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     JSONObject forecastO = forecastObject.getJSONArray("forecastday").getJSONObject(0);
                     JSONArray hourArray = forecastO.getJSONArray("hour");
 
-                    for(int i =0  ; i<hourArray.length() ; i ++){
+                    for(int i =0  ; i<hourArray.length() ; i++){
                         JSONObject hourObject = hourArray.getJSONObject(i);
                         String time = hourObject.getString("time");
                         String temper = hourObject.getString("temp_c");
