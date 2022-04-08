@@ -29,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar loadingPB;
     private TextView cityNameTV , temperatureTV , conditionTV;
     private RecyclerView weatherRV;
-    private TextInputLayout cityEdt;
+    private TextInputEditText cityEdt;
     private ImageView backIV , iconIV , searchIV;
 
     private ArrayList<WeatherRVModal> weatherRVModalArrayList;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         temperatureTV = findViewById(R.id.idTVTemperature);
         conditionTV = findViewById(R.id.idTVCondition);
         weatherRV = findViewById(R.id.idRVWeather);
-        cityEdt = findViewById(R.id.idTILCity);
+        cityEdt = findViewById(R.id.idEdtCity);
         backIV = findViewById(R.id.idIVBackground);
         iconIV = findViewById(R.id.idIVIcon);
         searchIV = findViewById(R.id.idIVSearch);
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         searchIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                String city = cityEdt.getEditText().getText().toString();
+                String city = cityEdt.getText().toString().trim();
                 if(city.isEmpty()){
                     Toast.makeText(MainActivity.this , "Please enter city name" , Toast.LENGTH_SHORT).show();
                 } else {
