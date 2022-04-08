@@ -141,14 +141,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         String cityName = "Not found!";
         Geocoder gcd = new Geocoder(getBaseContext() , Locale.getDefault());
         try{
-            List<Address> addresses = gcd.getFromLocation(latitude,longitude , 10);
+            List<Address> addresses = gcd.getFromLocation(latitude,longitude , 20);
             for (Address adr : addresses){
                 if(adr != null){
                     String city = adr.getLocality();
                     if(city != null && !city.equals("")) {
                         cityName = city;
                     } else {
-                        Log.e("TAG" , "CITY NOT FOUND");
+                        Log.e("TAG" , "CITY NOT FOUND Latitude =" + latitude + " Longitude = " + longitude);
                         Toast.makeText(this , "User City Not Found!!" , Toast.LENGTH_SHORT).show();
                     }
                 }
