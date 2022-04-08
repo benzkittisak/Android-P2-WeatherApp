@@ -12,8 +12,10 @@ import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,7 +32,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LocationListener {
 
     private RelativeLayout homeRL;
     private ProgressBar loadingPB;
@@ -58,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
     public int PERMISSION_CODE =1;
     public Criteria criteria;
     public String cityName ;
+    private static final int GPS_TIME_INTERVAL = 1000 * 60 * 5; // get gps location every 1 min
+    private static final int GPS_DISTANCE = 1000; // set the distance value in meter
+    private static final int HANDLER_DELAY = 1000 * 60 * 5;
+    private static final int START_HANDLER_DELAY = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,18 +90,24 @@ public class MainActivity extends AppCompatActivity {
 
         // เรีกยใช้งาน GPS ของตัวเครื่อง
 
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
             // เช็คว่าให้สิทธิ์เข้าถึง GPS หรือยัง
         if(ActivityCompat.checkSelfPermission(this , Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this , Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION , Manifest.permission.ACCESS_COARSE_LOCATION} , PERMISSION_CODE);
-
         }
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                requestLocation();
+                handler.postDelayed(this , HANDLER_DELAY);
+            }
+        } , START_HANDLER_DELAY);
         // ถ้าให้สิทธิ์แล้ว
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        cityName = getCityName(location.getLongitude() , location.getLatitude());
-        getWeatherInfo(cityName);
 
-
+//        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//        cityName = getCityName(location.getLongitude() , location.getLatitude());
+//        getWeatherInfo(cityName);
 
         searchIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,5 +228,26 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(jsoneObjectRequest);
 
 
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        cityName = getCityName(location.getLongitude() , location.getLatitude());
+
+        getWeatherInfo(cityName);
+        locationManager.removeUpdates(this);
+    }
+
+    private void requestLocation() {
+        if (locationManager == null)
+            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                        GPS_TIME_INTERVAL, GPS_DISTANCE, this);
+            }
+        }
     }
 }
