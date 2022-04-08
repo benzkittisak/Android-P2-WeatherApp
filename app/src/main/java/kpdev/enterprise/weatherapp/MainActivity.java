@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private void getWeatherInfo(String cityName){
         // เรียกใช้งาน API
         // กำหนด path ของ API
-        String url = "http://api.weatherapi.com/v1/forecast.json?key=102deb83cf914ed596273713220804&q="+cityName+"&days=1&aqi=no&alerts=no";
+        String url = "http://api.weatherapi.com/v1/current.json?key=102deb83cf914ed596273713220804&q="+cityName+"&aqi=no";
 
         cityNameTV.setText(cityName);
 
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onLocationChanged(@NonNull Location location) {
         cityName = getCityName(location.getLongitude() , location.getLatitude());
-
+        Log.d("TAG" , cityName);
         getWeatherInfo(cityName);
         locationManager.removeUpdates(this);
     }
@@ -242,10 +242,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if (locationManager == null)
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                         GPS_TIME_INTERVAL, GPS_DISTANCE, this);
             }
         }
