@@ -8,12 +8,15 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity"
     tools:openDrawer="start">
-
     <ProgressBar
         android:id="@+id/idLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:maxWidth="30dp"
+        android:maxHeight="55dp"
+        android:minWidth="15dp"
+        android:minHeight="15dp"
         android:visibility="gone" />
 
     <ImageView
@@ -27,7 +30,8 @@
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:visibility="visible">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -179,6 +183,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="14dp"
                     android:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
                     android:translationZ="45dp"
                     app:contentInsetStart="0dp"
@@ -216,7 +221,7 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="center_horizontal"
                         android:padding="10dp"
-                        android:text="99"
+                        android:text="--"
                         android:textColor="@color/white"
                         android:textSize="70dp" />
 

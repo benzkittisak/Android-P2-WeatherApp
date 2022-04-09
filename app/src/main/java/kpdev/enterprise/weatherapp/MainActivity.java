@@ -1,12 +1,15 @@
 package kpdev.enterprise.weatherapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -19,6 +22,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -26,6 +30,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -48,7 +53,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
-    private RelativeLayout homeRL;
+    private CoordinatorLayout coordinator_layout;
     private ProgressBar loadingPB;
     private TextView cityNameTV , temperatureTV , conditionTV , feelLikeTV , sunsetTV ,sunriseTV ;
     private RecyclerView weatherRV;
@@ -75,8 +80,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
+        // เรียกใช้ตัว action bar แบบสร้างเอง
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        homeRL = findViewById(R.id.idRLHome);
+        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.custom_action_bar);
+
+
+
+        coordinator_layout = findViewById(R.id.coordinator_layout);
         loadingPB = findViewById(R.id.idLoading);
         cityNameTV = findViewById(R.id.idTVCityName);
         temperatureTV = findViewById(R.id.idTVTemperature);
@@ -105,13 +120,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION , Manifest.permission.ACCESS_COARSE_LOCATION} , PERMISSION_CODE);
         }
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                requestLocation();
-                handler.postDelayed(this , HANDLER_DELAY);
-            }
-        } , START_HANDLER_DELAY);
+
+        Intent sIntent = getIntent();
+        String cityName = sIntent.getStringExtra("City");
+
+        if(cityName == null){
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    requestLocation();
+                    handler.postDelayed(this , HANDLER_DELAY);
+                }
+            } , START_HANDLER_DELAY);
+        }
     }
 
     @Override
@@ -167,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             @Override
             public void onResponse(JSONObject response) {
                 loadingPB.setVisibility(View.GONE);
-                homeRL.setVisibility(View.VISIBLE);
+                coordinator_layout.setVisibility(View.VISIBLE);
 
                 weatherRVModalArrayList.clear();
 
@@ -201,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     sunsetTV.setText(sunsetData);
 
                     String sunriseData = forecastO.getJSONObject("astro").getString("sunrise");
-                    sunriseTV.append(" " + sunriseData);
+                    sunriseTV.setText("Sunrise : " + sunriseData);
 
                     JSONArray hourArray = forecastO.getJSONArray("hour");
 
@@ -264,5 +285,37 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         inflater.inflate(R.menu.main_right_menu , menu);
 
         return true;
+    }
+
+    // จัดการกับเมนูเวลามีคนกดเข้ามา
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        int id = item.getItemId();
+        if (id == R.id.btnAdd){
+            Intent searchIntent = new Intent(this,SearchActivity.class);
+            startActivity(searchIntent);
+        }
+
+        return  super.onOptionsItemSelected(item);
+    }
+
+    // หลังจากที่ไปหน้าหาสถานที่มาแล้ว ให้มาทำงานที่นี่ก่อนเลย
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        Intent sIntent = getIntent();
+        String cityName = sIntent.getStringExtra("City");
+
+        if(cityName != null){
+            getWeatherInfo(cityName);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 }
