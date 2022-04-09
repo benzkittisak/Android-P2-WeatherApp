@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private CoordinatorLayout coordinator_layout;
     private ProgressBar loadingPB;
-    private TextView cityNameTV , temperatureTV , conditionTV , feelLikeTV , sunsetTV ,sunriseTV ;
+    private TextView cityNameTV , temperatureTV , conditionTV , feelLikeTV , sunsetTV ,sunriseTV , pressureTV , rainFallTV ;
     private RecyclerView weatherRV , forecaseRV;
     private ImageView backIV , iconIV ;
 
@@ -93,9 +93,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         coordinator_layout = findViewById(R.id.coordinator_layout);
         loadingPB = findViewById(R.id.idLoading);
+
         cityNameTV = findViewById(R.id.idTVCityName);
         temperatureTV = findViewById(R.id.idTVTemperature);
         conditionTV = findViewById(R.id.idTVCondition);
+        pressureTV = findViewById(R.id.idTVPressure);
+        rainFallTV = findViewById(R.id.idTVRain);
 
         weatherRV = findViewById(R.id.idRVWeather);
         forecaseRV = findViewById(R.id.idRVForecastFuture);
@@ -209,6 +212,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     String feelLike = response.getJSONObject("current").getString("feelslike_c");
                     feelLikeTV.setText(feelLike + "°c");
 
+                    String pressSure = response.getJSONObject("current").getString("pressure_mb");
+                    pressureTV.setText(pressSure + " hPa");
 
                     if(isDay == 1){
                         // in morning appBarLayout
@@ -229,12 +234,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                     JSONArray hourArray = forecastO.getJSONArray("hour");
 
+                    String rainFall = hourArray.getJSONObject(0).getString("chance_of_rain");
+                    rainFallTV.setText(rainFall + '%');
+
                     for(int i =0  ; i<hourArray.length() ; i++){
                         JSONObject hourObject = hourArray.getJSONObject(i);
                         String time = hourObject.getString("time");
                         String temper = hourObject.getString("temp_c");
                         String img = hourObject.getJSONObject("condition").getString("icon");
                         String wind = hourObject.getString("wind_kph");
+
 
                         // เพิ่มข้อมูลเข้าไปในตัว Adapter
                         weatherRVModalArrayList.add(new WeatherRVModal(time , temper , img , wind));
