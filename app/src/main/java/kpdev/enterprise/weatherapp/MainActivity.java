@@ -56,17 +56,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private CoordinatorLayout coordinator_layout;
     private ProgressBar loadingPB;
     private TextView cityNameTV , temperatureTV , conditionTV , feelLikeTV , sunsetTV ,sunriseTV ;
-    private RecyclerView weatherRV;
-    private TextInputEditText cityEdt;
-    private ImageView backIV , iconIV , searchIV;
-    private AppBarLayout appBarLayout;
+    private RecyclerView weatherRV , forecaseRV;
+    private ImageView backIV , iconIV ;
 
     private ArrayList<WeatherRVModal> weatherRVModalArrayList;
+    private ArrayList<ForecastModal> forecastModalList;
+
     private WeatherRVAdapter weatherRVAdapter;
+    private ForecastAdapter forecastAdapter;
 
     public LocationManager locationManager;
     public int PERMISSION_CODE =1;
-    public Criteria criteria;
     public String cityName ;
     private static final int GPS_TIME_INTERVAL = 1000 * 60 * 5; // get gps location every 1 min
     private static final int GPS_DISTANCE = 1000; // set the distance value in meter
@@ -96,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         cityNameTV = findViewById(R.id.idTVCityName);
         temperatureTV = findViewById(R.id.idTVTemperature);
         conditionTV = findViewById(R.id.idTVCondition);
+
         weatherRV = findViewById(R.id.idRVWeather);
+        forecaseRV = findViewById(R.id.idRVForecastFuture);
 
         backIV = findViewById(R.id.idIVBackground);
         iconIV = findViewById(R.id.idIVIcon);
@@ -105,13 +107,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         sunriseTV = findViewById(R.id.idTVSunrise);
 
 
-        appBarLayout = findViewById(R.id.appBarLayout);
 
         // กำหนนดข้อมูลเริ่มต้นให้กับ weatherArray
         weatherRVModalArrayList = new ArrayList<>();
         weatherRVAdapter = new WeatherRVAdapter(this , weatherRVModalArrayList);
         weatherRV.setAdapter(weatherRVAdapter);
 
+        // เรียกใช้งาน Adapter ของ พยากรณ์อากาศใน 10 วัน
+        forecastModalList = new ArrayList<>();
+        forecastAdapter = new ForecastAdapter(this , forecastModalList);
+        forecaseRV.setAdapter(forecastAdapter);
         // เรีกยใช้งาน GPS ของตัวเครื่อง
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -179,8 +184,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         String url = "http://api.weatherapi.com/v1/forecast.json?key=102deb83cf914ed596273713220804&q="+cityName+"&days=1&aqi=no&alerts=no";
 
         cityNameTV.setText(cityName);
-
-
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         // คือข้อมูลที่ตอบกลับมามันเป็น JSON ฉะนั้นเราก็จะขอข้อมูลที่เป็น JSON มาใช้
@@ -256,11 +259,60 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     }
 
+    private void getWeatherForecast(String cityName){
+        // เรียกใช้งาน API
+        // กำหนด path ของ API
+        String url = "http://api.weatherapi.com/v1/forecast.json?key=102deb83cf914ed596273713220804&q="+cityName+"&days=10&aqi=no&alerts=no";
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        // คือข้อมูลที่ตอบกลับมามันเป็น JSON ฉะนั้นเราก็จะขอข้อมูลที่เป็น JSON มาใช้
+        JsonObjectRequest jsoneObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                forecastModalList.clear();
+                try{
+
+                    JSONObject forecastObject = response.getJSONObject("forecast");
+                    JSONArray forecast = forecastObject.getJSONArray("forecastday");
+
+
+                    for(int i =0  ; i<forecast.length() ; i++){
+                        JSONObject dataObject = forecast.getJSONObject(i);
+                        JSONArray hourArray = dataObject.getJSONArray("hour");
+                        JSONObject logoObject = hourArray.getJSONObject(0);
+
+                        String day = dataObject.getString("date");
+                        String maxTemp = dataObject.getJSONObject("day").getString("maxtemp_c");
+                        String minTemp = dataObject.getJSONObject("day").getString("mintemp_c");
+                        String temperature = minTemp + "°c / " + maxTemp + "°c";
+                        String img = logoObject.getJSONObject("condition").getString("icon");
+
+                        // เพิ่มข้อมูลเข้าไปในตัว Adapter
+                        forecastModalList.add(new ForecastModal(day , temperature , img ));
+                    }
+
+                    forecastAdapter.notifyDataSetChanged();
+
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this , "Please enter valid city name!" , Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        requestQueue.add(jsoneObjectRequest);
+    }
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
         cityName = getCityName(location.getLongitude() , location.getLatitude());
-        Log.d("TAG" , cityName);
         getWeatherInfo(cityName);
+        getWeatherForecast(cityName);
         locationManager.removeUpdates(this);
     }
 
@@ -310,6 +362,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         if(cityName != null){
             getWeatherInfo(cityName);
+            getWeatherForecast(cityName);
         }
     }
 

@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible">
-
+                <!-- CardView1 -->
                 <RelativeLayout
                     android:id="@+id/cardView1"
                     android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="0dp"
                     android:backgroundTint="@color/main_card_transparent_white"
                     app:cardCornerRadius="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -77,15 +77,48 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/idTVForecastText"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="45dp"
+                        android:layout_marginBottom="15dp"
                         android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                 </RelativeLayout>
 
-                <LinearLayout
+                <!-- CardView2 -->
+                <RelativeLayout
+                    android:id="@+id/cardView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/cardView1"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/idTVForecastFuture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Forecast"
+
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/idRVForecastFuture"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/idTVForecastFuture"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/card_2_background"
+                        android:padding="10dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                </RelativeLayout>
+                <!-- CardView3 -->
+                <LinearLayout
+                    android:id="@+id/cardView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cardView2"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="0dp"
                     android:layout_marginEnd="20dp"
