@@ -17,6 +17,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -31,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 
@@ -47,10 +50,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private RelativeLayout homeRL;
     private ProgressBar loadingPB;
-    private TextView cityNameTV , temperatureTV , conditionTV;
+    private TextView cityNameTV , temperatureTV , conditionTV , feelLikeTV , sunsetTV ,sunriseTV ;
     private RecyclerView weatherRV;
     private TextInputEditText cityEdt;
     private ImageView backIV , iconIV , searchIV;
+    private AppBarLayout appBarLayout;
 
     private ArrayList<WeatherRVModal> weatherRVModalArrayList;
     private WeatherRVAdapter weatherRVAdapter;
@@ -78,10 +82,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         temperatureTV = findViewById(R.id.idTVTemperature);
         conditionTV = findViewById(R.id.idTVCondition);
         weatherRV = findViewById(R.id.idRVWeather);
-        cityEdt = findViewById(R.id.idEdtCity);
+
         backIV = findViewById(R.id.idIVBackground);
         iconIV = findViewById(R.id.idIVIcon);
-        searchIV = findViewById(R.id.idIVSearch);
+        feelLikeTV = findViewById(R.id.idTVFeelLike);
+        sunsetTV = findViewById(R.id.idTVSunset);
+        sunriseTV = findViewById(R.id.idTVSunrise);
+
+
+        appBarLayout = findViewById(R.id.appBarLayout);
 
         // กำหนนดข้อมูลเริ่มต้นให้กับ weatherArray
         weatherRVModalArrayList = new ArrayList<>();
@@ -103,24 +112,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 handler.postDelayed(this , HANDLER_DELAY);
             }
         } , START_HANDLER_DELAY);
-        // ถ้าให้สิทธิ์แล้ว
-
-//        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//        cityName = getCityName(location.getLongitude() , location.getLatitude());
-//        getWeatherInfo(cityName);
-
-        searchIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                String city = cityEdt.getText().toString().trim();
-                if(city.isEmpty()){
-                    Toast.makeText(MainActivity.this , "Please enter city name" , Toast.LENGTH_SHORT).show();
-                } else {
-                    cityNameTV.setText(cityName);
-                    getWeatherInfo(city);
-                }
-            }
-        });
     }
 
     @Override
@@ -183,21 +174,35 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 try{
                     String temperature = response.getJSONObject("current").getString("temp_c");
                     temperatureTV.setText(temperature+"°c");
+
                     int isDay = response.getJSONObject("current").getInt("is_day");
+
                     String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
                     String conditionIcon = response.getJSONObject("current").getJSONObject("condition").getString("icon");
                     Picasso.get().load("http:".concat(conditionIcon)).into(iconIV);
                     conditionTV.setText(condition);
 
+                    String feelLike = response.getJSONObject("current").getString("feelslike_c");
+                    feelLikeTV.setText(feelLike + "°c");
+
+
                     if(isDay == 1){
-                        // in morning
+                        // in morning appBarLayout
                         Picasso.get().load("https://i3.fpic.cc/file/img-b1/2022/04/08/TX-2409.jpg").into(backIV);
+
                     } else {
                         Picasso.get().load("https://i3.fpic.cc/file/img-b1/2022/04/08/amazing-starry-night-sky-with-milky-way-and-fallin-2021-08-29-02-11-57-utc.jpg").into(backIV);
                     }
 
                     JSONObject forecastObject = response.getJSONObject("forecast");
                     JSONObject forecastO = forecastObject.getJSONArray("forecastday").getJSONObject(0);
+
+                    String sunsetData = forecastO.getJSONObject("astro").getString("sunset");
+                    sunsetTV.setText(sunsetData);
+
+                    String sunriseData = forecastO.getJSONObject("astro").getString("sunrise");
+                    sunriseTV.append(" " + sunriseData);
+
                     JSONArray hourArray = forecastO.getJSONArray("hour");
 
                     for(int i =0  ; i<hourArray.length() ; i++){
@@ -249,5 +254,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                         GPS_TIME_INTERVAL, GPS_DISTANCE, this);
             }
         }
+    }
+
+
+    // สร้างเมนู
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_right_menu , menu);
+
+        return true;
     }
 }
