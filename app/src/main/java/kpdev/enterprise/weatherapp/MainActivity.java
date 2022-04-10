@@ -159,12 +159,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     // รับข้อมูลชื่อของเมือง
     private String getCityName(double longitude, double latitude){
         String cityName = "Bangkok";
+        // เรียกใช้งาน Geocoder เพื่อแปลงข้อความเช่นพวกพิกัดต่าง ๆ ให้เป็นสถานที่
+                                    // ส่งตัว context กับตัว location เริ่มต้นลงไป
         Geocoder gcd = new Geocoder(getBaseContext() , Locale.getDefault());
         try{
+                                        // ให้ gcd ไปรับข้อมูลของสถานที่จาก latitude กับ longitude โดยที่ผลลัพธ์ที่ได้จะเอามาไม่เกิน 20 สถานที่
             List<Address> addresses = gcd.getFromLocation(latitude,longitude , 20);
+            // ทำการลูปข้อมูลของสถานที่ออกมาเก็บไว้ในตัวแปร adr
             for (Address adr : addresses){
+                    // ถ้าสถานที่มันไม่ว่าง
                 if(adr != null){
+                        // ให้ตัวแปร city มาเก็บสถานที่ ที่ได้จากตำแหน่งของ latitude กับ longitude
                     String city = adr.getLocality();
+                        // ถ้าตัวแปร city มันมีข้อมูล ก็ให้ตัวแปร cityName = city ไปเลย
                     if(city != null && !city.equals("")) {
                         cityName = city;
                     } else {
@@ -190,22 +197,31 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         // คือข้อมูลที่ตอบกลับมามันเป็น JSON ฉะนั้นเราก็จะขอข้อมูลที่เป็น JSON มาใช้
+                                                    // ให้ขอข้อมูลโดยใช้ Method GET โดยขอข้อมูลจาก url และไม่ส่ง parameter อะไรไป
         JsonObjectRequest jsoneObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
+            // หลังจากที่ข้อมูลตอบกลับมาจาก Server
             public void onResponse(JSONObject response) {
+                // ให้ปิดตัวหน้าจอ Loading
                 loadingPB.setVisibility(View.GONE);
+                // เปิดหน้าจอของแอป
                 coordinator_layout.setVisibility(View.VISIBLE);
-
+                // เคลียร์ค่าในตัว Array ที่ใช้แสดงข้อมูลพยากรณ์อากาศรายชั่วโมง
                 weatherRVModalArrayList.clear();
 
                 try{
+                    // ดึงข้อมูลอุณหภูมิจากข้อมูลที่มันตอบกลับมา
                     String temperature = response.getJSONObject("current").getString("temp_c");
                     temperatureTV.setText(temperature+"°c");
 
+                    // ดึงข้อมูลว่าตอนนี้กลางวันหรือกลางคืน
                     int isDay = response.getJSONObject("current").getInt("is_day");
-
+                    // รับข้อมูลสภาพอากาศ
                     String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
+                    // รับข้อมูลไอคอนของสภาพอากาศ
                     String conditionIcon = response.getJSONObject("current").getJSONObject("condition").getString("icon");
+
+                    // ใช้ตัว Picasso ไปเซ็ต icon
                     Picasso.get().load("http:".concat(conditionIcon)).into(iconIV);
                     conditionTV.setText(condition);
 
@@ -215,11 +231,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     String pressSure = response.getJSONObject("current").getString("pressure_mb");
                     pressureTV.setText(pressSure + " hPa");
 
+                    // ถ้าเมืองนั้นเป็นกลางวันจะให้เซ็ตพื้นหลังเป็นรูปอะไร ถ้ากลางคืนจะให้เซ็ตเป็นรูปอะไร
                     if(isDay == 1){
-                        // in morning appBarLayout
+                        // กลางวัน
                         Picasso.get().load("https://i3.fpic.cc/file/img-b1/2022/04/08/TX-2409.jpg").into(backIV);
-
                     } else {
+                        // กลางคืน
                         Picasso.get().load("https://i3.fpic.cc/file/img-b1/2022/04/08/amazing-starry-night-sky-with-milky-way-and-fallin-2021-08-29-02-11-57-utc.jpg").into(backIV);
                     }
 
@@ -257,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             }
         }, new Response.ErrorListener() {
+            // หลังจากที่ข้อมูลตอบกลับมาจาก Server เหมือนกันแต่พ่วง Error กลับมาด้วย
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(MainActivity.this , "Please enter valid city name!" , Toast.LENGTH_SHORT).show();
