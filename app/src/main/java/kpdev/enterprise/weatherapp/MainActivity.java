@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private TextView cityNameTV , temperatureTV , conditionTV , feelLikeTV , sunsetTV ,sunriseTV , pressureTV , rainFallTV ;
     private RecyclerView weatherRV , forecaseRV;
     private ImageView backIV , iconIV ;
+    private RelativeLayout idRLHome ;
 
     private ArrayList<WeatherRVModal> weatherRVModalArrayList;
     private ArrayList<ForecastModal> forecastModalList;
@@ -108,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         feelLikeTV = findViewById(R.id.idTVFeelLike);
         sunsetTV = findViewById(R.id.idTVSunset);
         sunriseTV = findViewById(R.id.idTVSunrise);
+        idRLHome = findViewById(R.id.idRLHome);
 
 
 
@@ -218,11 +220,28 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     int isDay = response.getJSONObject("current").getInt("is_day");
                     // รับข้อมูลสภาพอากาศ
                     String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
-                    // รับข้อมูลไอคอนของสภาพอากาศ
-                    String conditionIcon = response.getJSONObject("current").getJSONObject("condition").getString("icon");
 
-                    // ใช้ตัว Picasso ไปเซ็ต icon
-                    Picasso.get().load("http:".concat(conditionIcon)).into(iconIV);
+
+                    // ใช้ตัว Picasso ไปเซ็ต icon (โหลดจาก cloud server ของแอปที่ชื่อว่า discord) โดยแบ่งเป็นกลางวันกลางคืน
+                    // ถ้าเมืองนั้นเป็นกลางวันจะให้เซ็ตพื้นหลังเป็นรูปอะไร ถ้ากลางคืนจะให้เซ็ตเป็นรูปอะไร
+                    if(isDay == 1){
+                        // พื้นหลัง กลางวัน
+                        Picasso.get().load("https://i3.fpic.cc/file/img-b1/2022/04/08/TX-2409.jpg").into(backIV);
+
+                        // Icon สภาพอากาศ ตอนกลางวัน
+                        if(condition.equals("Clear")){
+                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963098637125185677/unknown.png").into(iconIV);
+                        }
+                    } else {
+                        // พื้นหลัง กลางคืน
+                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963120111177322496/night-sky-of-swiss-alps-2021-09-02-02-03-40-utc.jpg").into(backIV);
+                        idRLHome.setBackgroundResource(R.drawable.nightbackgroundindex);
+
+                        // Icon สภาพอากาศ ตอนกลางคืน
+                        if(condition.equals("Clear")){
+                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963119007106465863/unknown.png").into(iconIV);
+                        }
+                    }
                     conditionTV.setText(condition);
 
                     String feelLike = response.getJSONObject("current").getString("feelslike_c");
@@ -230,15 +249,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                     String pressSure = response.getJSONObject("current").getString("pressure_mb");
                     pressureTV.setText(pressSure + " hPa");
-
-                    // ถ้าเมืองนั้นเป็นกลางวันจะให้เซ็ตพื้นหลังเป็นรูปอะไร ถ้ากลางคืนจะให้เซ็ตเป็นรูปอะไร
-                    if(isDay == 1){
-                        // กลางวัน
-                        Picasso.get().load("https://i3.fpic.cc/file/img-b1/2022/04/08/TX-2409.jpg").into(backIV);
-                    } else {
-                        // กลางคืน
-                        Picasso.get().load("https://i3.fpic.cc/file/img-b1/2022/04/08/amazing-starry-night-sky-with-milky-way-and-fallin-2021-08-29-02-11-57-utc.jpg").into(backIV);
-                    }
 
                     JSONObject forecastObject = response.getJSONObject("forecast");
                     JSONObject forecastO = forecastObject.getJSONArray("forecastday").getJSONObject(0);
@@ -259,11 +269,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                         String time = hourObject.getString("time");
                         String temper = hourObject.getString("temp_c");
                         String img = hourObject.getJSONObject("condition").getString("icon");
-                        String wind = hourObject.getString("wind_kph");
+//                        String wind = hourObject.getString("wind_kph");
 
 
                         // เพิ่มข้อมูลเข้าไปในตัว Adapter
-                        weatherRVModalArrayList.add(new WeatherRVModal(time , temper , img , wind));
+                        weatherRVModalArrayList.add(new WeatherRVModal(time , temper , img ));
                     }
 
                     weatherRVAdapter.notifyDataSetChanged();

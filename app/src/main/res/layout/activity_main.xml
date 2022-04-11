@@ -43,6 +43,7 @@
                 android:id="@+id/idRLHome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/backgroundindex"
                 android:visibility="visible">
                 <!-- CardView1 -->
                 <RelativeLayout
@@ -269,7 +270,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
 
@@ -329,29 +330,29 @@
                         android:padding="10dp"
                         android:text="--"
                         android:textColor="@color/white"
-                        android:textSize="70dp" />
+                        android:textSize="34sp" />
 
                     <TextView
                         android:id="@+id/idTVCondition"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/idTVTemperature"
+                        android:layout_below="@id/idIVIcon"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="20dp"
                         android:text="Condition"
                         android:textAlignment="center"
                         android:textColor="@color/white" />
 
                     <ImageView
                         android:id="@+id/idIVIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/idTVCondition"
+                        android:layout_width="400px"
+                        android:layout_height="400px"
+                        android:layout_below="@id/idTVTemperature"
                         android:layout_centerHorizontal="true"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
                         android:gravity="center"
