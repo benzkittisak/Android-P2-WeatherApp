@@ -8,11 +8,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,10 +21,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,8 +34,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.textfield.TextInputEditText;
+
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -51,10 +46,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
-    private CoordinatorLayout coordinator_layout;
-    private ProgressBar loadingPB;
     private TextView cityNameTV , temperatureTV , conditionTV , feelLikeTV , sunsetTV ,sunriseTV , pressureTV , rainFallTV ;
     private RecyclerView weatherRV , forecaseRV;
     private ImageView backIV , iconIV ;
@@ -90,10 +84,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar);
 
-
-
-        coordinator_layout = findViewById(R.id.coordinator_layout);
-        loadingPB = findViewById(R.id.idLoading);
 
         cityNameTV = findViewById(R.id.idTVCityName);
         temperatureTV = findViewById(R.id.idTVTemperature);
