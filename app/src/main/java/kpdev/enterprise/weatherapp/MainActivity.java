@@ -202,10 +202,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             @Override
             // หลังจากที่ข้อมูลตอบกลับมาจาก Server
             public void onResponse(JSONObject response) {
-                // ให้ปิดตัวหน้าจอ Loading
-                loadingPB.setVisibility(View.GONE);
-                // เปิดหน้าจอของแอป
-                coordinator_layout.setVisibility(View.VISIBLE);
+//                // ให้ปิดตัวหน้าจอ Loading
+//                loadingPB.setVisibility(View.GONE);
+//                // เปิดหน้าจอของแอป
+//                coordinator_layout.setVisibility(View.VISIBLE);
                 // เคลียร์ค่าในตัว Array ที่ใช้แสดงข้อมูลพยากรณ์อากาศรายชั่วโมง
                 weatherRVModalArrayList.clear();
 
