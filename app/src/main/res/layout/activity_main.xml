@@ -43,6 +43,7 @@
                 android:id="@+id/idRLHome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:alpha="1"
                 android:background="@drawable/backgroundindex"
                 android:visibility="visible">
                 <!-- CardView1 -->
@@ -164,6 +165,8 @@
                             android:id="@+id/textView8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/icon_sunset"
+                            android:drawablePadding="10dp"
                             android:text="SUNSET"
                             android:textColor="#66FFFFFF"
                             android:textSize="16sp"
@@ -215,6 +218,8 @@
                             android:id="@+id/textView6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/icon_pressure"
+                            android:drawablePadding="10dp"
                             android:text="PRESSURE"
                             android:textColor="#66FFFFFF"
                             android:textSize="16sp"
@@ -230,6 +235,7 @@
                             android:textColor="@color/white"
                             android:textSize="24sp"
                             android:textStyle="bold" />
+
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -245,6 +251,8 @@
                             android:id="@+id/textView7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/icon_rainy"
+                            android:drawablePadding="10dp"
                             android:text="RAINFALL"
                             android:textColor="#66FFFFFF"
                             android:textSize="16sp"
@@ -356,7 +364,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
                         android:gravity="center"
-                        android:src="@mipmap/ic_launcher" />
+                        />
                 </RelativeLayout>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
