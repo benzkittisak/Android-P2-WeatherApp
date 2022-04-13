@@ -3,7 +3,6 @@ package kpdev.enterprise.weatherapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,21 +10,18 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,17 +41,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView cityNameTV, temperatureTV, conditionTV, feelLikeTV, sunsetTV, sunriseTV, pressureTV, rainFallTV;
     private RecyclerView weatherRV, forecaseRV;
     private ImageView backIV, iconIV;
-    private RelativeLayout idRLHome;
+    private RelativeLayout idRLHome , cardViewBG;
+    private LayoutInflater inflater;
 
     private ArrayList<WeatherRVModal> weatherRVModalArrayList;
     private ArrayList<ForecastModal> forecastModalList;
@@ -91,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         conditionTV = findViewById(R.id.idTVCondition);
         pressureTV = findViewById(R.id.idTVPressure);
         rainFallTV = findViewById(R.id.idTVRain);
-
         weatherRV = findViewById(R.id.idRVWeather);
         forecaseRV = findViewById(R.id.idRVForecastFuture);
 
@@ -176,8 +169,10 @@ public class MainActivity extends AppCompatActivity {
                     // ใช้ตัว Picasso ไปเซ็ต icon (โหลดจาก cloud server ของแอปที่ชื่อว่า discord) โดยแบ่งเป็นกลางวันกลางคืน
                     // ถ้าเมืองนั้นเป็นกลางวันจะให้เซ็ตพื้นหลังเป็นรูปอะไร ถ้ากลางคืนจะให้เซ็ตเป็นรูปอะไร
                     if (isDay == 1) {
+
                         // พื้นหลัง กลางวัน
-                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963680981464784906/TX_2409.jpg").into(backIV);
+                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963789850983694336/sky-2021-08-30-06-22-08-utc.jpg").into(backIV);
+
                         // Icon สภาพอากาศ ตอนกลางวัน
                         if (condition.equals("Clear")) {
                             Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963098637125185677/unknown.png").into(iconIV);
