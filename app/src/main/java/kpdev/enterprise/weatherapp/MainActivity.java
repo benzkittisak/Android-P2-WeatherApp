@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
-
+    // MoooMoooo
     private RelativeLayout homeRL;
     private ProgressBar loadingPB;
     private TextView cityNameTV , temperatureTV , conditionTV;
