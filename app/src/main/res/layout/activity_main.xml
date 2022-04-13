@@ -8,16 +8,6 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity"
     tools:openDrawer="start">
-    <!--    <ProgressBar-->
-    <!--        android:id="@+id/idPBLoading"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_centerInParent="true"-->
-    <!--        android:maxWidth="30dp"-->
-    <!--        android:maxHeight="55dp"-->
-    <!--        android:minWidth="15dp"-->
-    <!--        android:minHeight="15dp"-->
-    <!--        android:visibility="gone" />-->
 
     <ImageView
         android:id="@+id/idIVBackground"
