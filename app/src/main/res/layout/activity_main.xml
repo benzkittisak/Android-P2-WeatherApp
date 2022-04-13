@@ -32,6 +32,7 @@
                 android:id="@+id/idRLHome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:alpha="0.80"
                 android:background="@drawable/backgroundindex"
                 android:visibility="visible">
                 <!-- CardView1 -->

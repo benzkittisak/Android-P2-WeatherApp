@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,13 +37,83 @@ public class WeatherRVAdapter  extends RecyclerView.Adapter<WeatherRVAdapter.Vie
 
     @Override
     public void onBindViewHolder(@NonNull WeatherRVAdapter.ViewHolder holder, int position) {
-
         WeatherRVModal modal = weatherRVModalList.get(position);
+        holder.isDay = modal.getIsDay();
+        holder.condition = modal.getCondition();
         holder.temperatureTV.setText(modal.getTemperature()+"°c");
-        Picasso.get().load("http:".concat(modal.getIcon())).into(holder.conditionTV);
+
+        if (holder.isDay == 1) { //เป็นกลางวัน
+
+            // Icon สภาพอากาศ ตอนกลางวัน
+            if (holder.condition.equals("Sunny")) {
+                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963098637125185677/unknown.png").into(holder.conditionTV);
+            }
+            else if (holder.condition.equals("Partly cloudy")){
+                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804344464076820/unknown.png").into(holder.conditionTV);
+            }
+            else if (holder.condition.equals("Patchy rain possible")){
+                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963830564580905010/unknown.png").into(holder.conditionTV);
+            }
+            else if (holder.condition.equals("Patchy snow possible")){
+                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833443744116786/unknown.png").into(holder.conditionTV);
+            }
+            else if (holder.condition.equals("Patchy sleet possible")){
+                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963834934227783690/patchysleetpossible.png").into(holder.conditionTV);
+            }
+        } else { //เป็นกลางคืน
+
+            // Icon สภาพอากาศ ตอนกลางคืน
+            if (holder.condition.equals("Clear")) {
+                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963119007106465863/unknown.png").into(holder.conditionTV);
+            }
+            else if (holder.condition.equals("Partly cloudy")){
+                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804499275808788/unknown.png").into(holder.conditionTV);
+            }
+            else if (holder.condition.equals("Patchy rain possible")){
+                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833412886614037/unknown.png").into(holder.conditionTV);
+            }
+            else if (holder.condition.equals("Patchy snow possible")){
+                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833460487749693/unknown.png").into(holder.conditionTV);
+            }
+            else if (holder.condition.equals("Patchy sleet possible")){
+                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963834933904809984/nightpatchysleetpossible.png").into(holder.conditionTV);
+            }
+        }
+        if (holder.condition.equals("Cloudy")){
+            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804673276534814/unknown.png").into(holder.conditionTV);
+        }
+        else if (holder.condition.equals("Overcast")){
+            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804852088102922/unknown.png").into(holder.conditionTV);
+        }
+        else if (holder.condition.equals("Mist")){
+            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963821765321166918/unknown.png").into(holder.conditionTV);
+        }
+        else if (holder.condition.equals("Patchy freezing drizzle possible")){
+            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963838958251417740/unknown.png").into(holder.conditionTV);
+        }
+        else if (holder.condition.equals("Thundery outbreaks possible")){
+            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963839740900171776/unknown.png").into(holder.conditionTV);
+        }
+        else if (holder.condition.equals("Blowing snow")){
+            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963841176576860180/unknown.png").into(holder.conditionTV);
+        }
+        else if (holder.condition.equals("Blizzard")){
+            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963842282459648020/unknown.png").into(holder.conditionTV);
+        }
+        else if (holder.condition.equals("Fog")){
+            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963843408378597386/unknown.png").into(holder.conditionTV);
+        }
+        else if (holder.condition.equals("Fog")){
+            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963844259465805855/unknown.png").into(holder.conditionTV);
+        }
+
+        //Picasso.get().load("http:".concat(modal.getIcon())).into(holder.conditionTV);
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
 
+        if(holder.isDay == 1){
+            holder.cardViewBG.setBackgroundResource(R.drawable.daycard_background);
+        }
         try{
             Date t = input.parse(modal.getTime());
             holder.timeTV.setText(output.format(t));
@@ -61,11 +132,14 @@ public class WeatherRVAdapter  extends RecyclerView.Adapter<WeatherRVAdapter.Vie
 
         private TextView  temperatureTV , timeTV ;
         private ImageView conditionTV ;
+        private RelativeLayout  cardViewBG;
+        private String condition;
+        private int isDay;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-
+            cardViewBG = itemView.findViewById(R.id.cardViewBG);
             temperatureTV = itemView.findViewById(R.id.idTVTemperature);
             timeTV = itemView.findViewById(R.id.idTVTime);
             conditionTV = itemView.findViewById(R.id.idIVCondition);
