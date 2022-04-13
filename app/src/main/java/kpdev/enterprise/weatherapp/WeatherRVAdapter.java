@@ -61,7 +61,6 @@ public class WeatherRVAdapter  extends RecyclerView.Adapter<WeatherRVAdapter.Vie
                 Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963834934227783690/patchysleetpossible.png").into(holder.conditionTV);
             }
         } else { //เป็นกลางคืน
-
             // Icon สภาพอากาศ ตอนกลางคืน
             if (holder.condition.equals("Clear")) {
                 Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963119007106465863/unknown.png").into(holder.conditionTV);

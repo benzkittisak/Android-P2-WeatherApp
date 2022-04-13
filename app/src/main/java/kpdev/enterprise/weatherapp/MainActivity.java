@@ -265,9 +265,9 @@ public class MainActivity extends AppCompatActivity {
                         String time = hourObject.getString("time");
                         String temper = hourObject.getString("temp_c");
                         String img = hourObject.getJSONObject("condition").getString("icon");
-
+                        String con = hourObject.getJSONObject("condition").getString("text");
                         // เพิ่มข้อมูลเข้าไปในตัว Adapter
-                        weatherRVModalArrayList.add(new WeatherRVModal(time, temper, img , isDay , condition));
+                        weatherRVModalArrayList.add(new WeatherRVModal(time, temper, img , isDay , con));
                     }
                     weatherRVAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
