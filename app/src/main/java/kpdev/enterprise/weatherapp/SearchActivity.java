@@ -116,7 +116,7 @@ public class SearchActivity extends AppCompatActivity {
 
                                 Toast.makeText(SearchActivity.this , location.getName() , Toast.LENGTH_SHORT).show();
                                 Intent intent=new Intent (SearchActivity.this,MainActivity.class);
-                                intent.putExtra("City",location.getName());
+                                intent.putExtra("cityName",location.getName());
                                 startActivity(intent);
                                 finish();
                             }
