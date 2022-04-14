@@ -21,8 +21,8 @@
 
     <ImageView
         android:id="@+id/imgDay"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_gravity="center"
         android:layout_weight="1"
         app:srcCompat="@drawable/ic_launcher_background" />

@@ -2,6 +2,7 @@ package kpdev.enterprise.weatherapp;
 
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import org.w3c.dom.Text;
 import kpdev.enterprise.weatherapp.ForecastModal;
 
 import java.text.ParseException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +47,23 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         ForecastModal modal = forecastDay.get(position);
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat output = new SimpleDateFormat("EEE");
+
+        try{
+            Date t = input.parse(modal.getDate());
+            Date date = new Date();
+            String nowDate = output.format(date).toUpperCase(Locale.ROOT);
+            String forecastDate = output.format(t).toUpperCase(Locale.ROOT);
+            if(nowDate.equals(forecastDate)){
+                holder.tvDay.setText("TODAY");
+            }else {
+                holder.tvDay.setText(forecastDate);
+
+            }
+
+        }catch(ParseException e){
+            e.printStackTrace();
+        }
+
         holder.iconimg = modal.getIcon();
         String convertConditionFormatToArray[] = holder.iconimg.split("\\ " , -1);
         String convertConditionArrayToString = String.join("" , convertConditionFormatToArray).toLowerCase(Locale.ROOT);
@@ -52,13 +71,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png").into(holder.imgDay);
 
         holder.temperatureTV.setText(modal.getTemperature());
-
-        try{
-            Date t = input.parse(modal.getDate());
-            holder.tvDay.setText(output.format(t).toUpperCase(Locale.ROOT));
-        }catch(ParseException e){
-            e.printStackTrace();
-        }
 
     }
     @Override

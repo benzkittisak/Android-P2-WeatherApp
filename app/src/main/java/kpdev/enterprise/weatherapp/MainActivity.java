@@ -11,38 +11,29 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.widget.Toolbar;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -153,9 +144,6 @@ public class MainActivity extends AppCompatActivity {
             // หลังจากที่ข้อมูลตอบกลับมาจาก Server
             public void onResponse(JSONObject response) {
 //                // ให้ปิดตัวหน้าจอ Loading
-//                idPBLoading.setVisibility(View.GONE);
-//                // เปิดหน้าจอของแอป
-//                idCLLayout.setVisibility(View.VISIBLE);
                 // เคลียร์ค่าในตัว Array ที่ใช้แสดงข้อมูลพยากรณ์อากาศรายชั่วโมง
                 weatherRVModalArrayList.clear();
 
@@ -174,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                     String convertConditionArrayToString = String.join("" , convertConditionFormatToArray).toLowerCase(Locale.ROOT);
                     // ใช้ตัว Picasso ไปเซ็ต icon (โหลดจาก cloud server ของแอปที่ชื่อว่า discord) โดยแบ่งเป็นกลางวันกลางคืน
                     // ถ้าเมืองนั้นเป็นกลางวันจะให้เซ็ตพื้นหลังเป็นรูปอะไร ถ้ากลางคืนจะให้เซ็ตเป็นรูปอะไร
-                    Log.d("ICON" , "https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png");
+
                     if (isDay == 1) { //เป็นกลางวัน
 //                  พื้นหลัง กลางวัน
                         Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963789850983694336/sky-2021-08-30-06-22-08-utc.jpg").into(backIV);
@@ -251,13 +239,9 @@ public class MainActivity extends AppCompatActivity {
 
                     JSONObject forecastObject = response.getJSONObject("forecast");
                     JSONArray forecast = forecastObject.getJSONArray("forecastday");
-
-
                     for (int i = 0; i < forecast.length(); i++) {
                         JSONObject dataObject = forecast.getJSONObject(i);
                         JSONArray hourArray = dataObject.getJSONArray("hour");
-                        JSONObject logoObject = hourArray.getJSONObject(0);
-
                         String day = dataObject.getString("date");
                         String maxTemp = dataObject.getJSONObject("day").getString("maxtemp_c");
                         String minTemp = dataObject.getJSONObject("day").getString("mintemp_c");
@@ -273,7 +257,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -334,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationChanged(@NonNull Location location) {
                 String latitude = String.valueOf(location.getLatitude());
                 String longitude = String.valueOf(location.getLongitude());
-                Log.d("GPS", "LATITUDE = " + latitude + ", LONGITUDE = " + longitude );
+
                 getWeatherInfo(latitude , longitude , null);
                 getWeatherForecast(latitude , longitude , null);
             }
