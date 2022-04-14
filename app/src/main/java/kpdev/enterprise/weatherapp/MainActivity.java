@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         // พื้นหลัง กลางคืน
                         Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963120111177322496/night-sky-of-swiss-alps-2021-09-02-02-03-40-utc.jpg").into(backIV);
                         idRLHome.setBackgroundResource(R.drawable.nightbackgroundindex);
-                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + ".png").into(iconIV);
+                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + "_.png").into(iconIV);
 
                     }
 //
@@ -215,8 +215,9 @@ public class MainActivity extends AppCompatActivity {
                         String temper = hourObject.getString("temp_c");
                         String img = hourObject.getJSONObject("condition").getString("icon");
                         String con = hourObject.getJSONObject("condition").getString("text");
+                        int is_day = hourObject.getInt("is_day");
                         // เพิ่มข้อมูลเข้าไปในตัว Adapter
-                        weatherRVModalArrayList.add(new WeatherRVModal(time, temper, img , isDay , con));
+                        weatherRVModalArrayList.add(new WeatherRVModal(time, temper, img , is_day , con));
                     }
                     weatherRVAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {

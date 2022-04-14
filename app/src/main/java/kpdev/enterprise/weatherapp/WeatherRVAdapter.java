@@ -46,29 +46,33 @@ public class WeatherRVAdapter  extends RecyclerView.Adapter<WeatherRVAdapter.Vie
         String convertConditionFormatToArray[] = holder.condition.split("\\ " , -1);
         String convertConditionArrayToString = String.join("" , convertConditionFormatToArray).toLowerCase(Locale.ROOT);
         Log.d("WEATHER_RV_ICON "  , convertConditionArrayToString);
-        if (holder.isDay == 1) { //เป็นกลางวัน
-            Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png").into(holder.conditionTV);
-            Log.d("WEATHER_RV_ICON_DAY "  , "https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + ".png");
 
-        } else { //เป็นกลางคืน
-            // Icon สภาพอากาศ ตอนกลางคืน
-            Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + ".png").into(holder.conditionTV);
-            Log.d("WEATHER_RV_ICON_NIGHT "  , "https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + ".png");
-
-        }
-//
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
-
-        if(holder.isDay == 1){
-            holder.cardViewBG.setBackgroundResource(R.drawable.daycard_background);
-        }
         try{
             Date t = input.parse(modal.getTime());
+            holder.timeCondition = output.format(t);
             holder.timeTV.setText(output.format(t));
         }catch (ParseException e){
             e.printStackTrace();
         }
+
+        if (holder.isDay == 1) { //เป็นกลางวัน
+            Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png").into(holder.conditionTV);
+            Log.d("WEATHER_RV_ICON_DAY "  , "https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png");
+
+        } else { //เป็นกลางคืน
+            // Icon สภาพอากาศ ตอนกลางคืน
+            Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + ".png").into(holder.conditionTV);
+        }
+//
+
+
+        if(holder.isDay == 1){
+            holder.cardViewBG.setBackgroundResource(R.drawable.daycard_background);
+        }
+
+
 
     }
 
@@ -82,7 +86,7 @@ public class WeatherRVAdapter  extends RecyclerView.Adapter<WeatherRVAdapter.Vie
         private TextView  temperatureTV , timeTV ;
         private ImageView conditionTV ;
         private RelativeLayout  cardViewBG;
-        private String condition;
+        private String condition , timeCondition;
         private int isDay;
 
         public ViewHolder(@NonNull View itemView) {
