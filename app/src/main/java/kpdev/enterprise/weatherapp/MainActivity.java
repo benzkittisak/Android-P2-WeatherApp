@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         // พื้นหลัง กลางคืน
                         Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963120111177322496/night-sky-of-swiss-alps-2021-09-02-02-03-40-utc.jpg").into(backIV);
                         idRLHome.setBackgroundResource(R.drawable.nightbackgroundindex);
-                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + "_.png").into(iconIV);
+                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + ".png").into(iconIV);
 
                     }
 //
