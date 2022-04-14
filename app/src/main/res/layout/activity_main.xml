@@ -126,6 +126,8 @@
                             android:id="@+id/textView5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_thermometer__1_"
+                            android:drawablePadding="10dp"
                             android:text="FEELS LIKE"
                             android:textColor="#66FFFFFF"
                             android:textSize="16sp"
