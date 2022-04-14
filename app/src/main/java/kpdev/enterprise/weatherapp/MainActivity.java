@@ -120,7 +120,8 @@ public class MainActivity extends AppCompatActivity {
                 getWeatherForCurrentLocation();
             } else {
                 Toast.makeText(this, "Please provide the permissions", Toast.LENGTH_SHORT).show();
-                finish();
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION , Manifest.permission.ACCESS_COARSE_LOCATION},PERMISSION_CODE);
+                return;
             }
         }
     }
