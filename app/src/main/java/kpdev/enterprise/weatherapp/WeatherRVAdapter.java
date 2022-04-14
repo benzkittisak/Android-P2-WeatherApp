@@ -1,6 +1,7 @@
 package kpdev.enterprise.weatherapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class WeatherRVAdapter  extends RecyclerView.Adapter<WeatherRVAdapter.ViewHolder> {
 
@@ -41,54 +43,62 @@ public class WeatherRVAdapter  extends RecyclerView.Adapter<WeatherRVAdapter.Vie
         holder.isDay = modal.getIsDay();
         holder.condition = modal.getCondition();
         holder.temperatureTV.setText(modal.getTemperature()+"°c");
-
+        String convertConditionFormatToArray[] = holder.condition.split("\\ " , -1);
+        String convertConditionArrayToString = String.join("" , convertConditionFormatToArray).toLowerCase(Locale.ROOT);
+        Log.d("WEATHER_RV_ICON "  , convertConditionArrayToString);
         if (holder.isDay == 1) { //เป็นกลางวัน
-            Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + holder.condition + ".png").into(holder.conditionTV);
+            Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png").into(holder.conditionTV);
         } else { //เป็นกลางคืน
             // Icon สภาพอากาศ ตอนกลางคืน
-            if (holder.condition.equals("Clear")) {
-                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963119007106465863/unknown.png").into(holder.conditionTV);
-            }
-            else if (holder.condition.equals("Partly cloudy")){
-                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804499275808788/unknown.png").into(holder.conditionTV);
-            }
-            else if (holder.condition.equals("Patchy rain possible")){
-                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833412886614037/unknown.png").into(holder.conditionTV);
-            }
-            else if (holder.condition.equals("Patchy snow possible")){
-                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833460487749693/unknown.png").into(holder.conditionTV);
-            }
-            else if (holder.condition.equals("Patchy sleet possible")){
-                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963834933904809984/nightpatchysleetpossible.png").into(holder.conditionTV);
-            }
+            Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + ".png").into(holder.conditionTV);
+            Log.d("WEATHER_RV_ICON_NIGHT "  , "https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + ".png");
+
+
+//            if (holder.condition.equals("Clear")) {
+//                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963119007106465863/unknown.png").into(holder.conditionTV);
+//            }
+//            else if (holder.condition.equals("Partly cloudy")){
+//                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804499275808788/unknown.png").into(holder.conditionTV);
+//            }
+//            else if (holder.condition.equals("Patchy rain possible")){
+//                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833412886614037/unknown.png").into(holder.conditionTV);
+//            }
+//            else if (holder.condition.equals("Patchy snow possible")){
+//                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833460487749693/unknown.png").into(holder.conditionTV);
+//            }
+//            else if (holder.condition.equals("Patchy sleet possible")){
+//                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963834933904809984/nightpatchysleetpossible.png").into(holder.conditionTV);
+//            }
         }
-        if (holder.condition.equals("Cloudy")){
-            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804673276534814/unknown.png").into(holder.conditionTV);
-        }
-        else if (holder.condition.equals("Overcast")){
-            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804852088102922/unknown.png").into(holder.conditionTV);
-        }
-        else if (holder.condition.equals("Mist")){
-            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963821765321166918/unknown.png").into(holder.conditionTV);
-        }
-        else if (holder.condition.equals("Patchy freezing drizzle possible")){
-            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963838958251417740/unknown.png").into(holder.conditionTV);
-        }
-        else if (holder.condition.equals("Thundery outbreaks possible")){
-            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963839740900171776/unknown.png").into(holder.conditionTV);
-        }
-        else if (holder.condition.equals("Blowing snow")){
-            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963841176576860180/unknown.png").into(holder.conditionTV);
-        }
-        else if (holder.condition.equals("Blizzard")){
-            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963842282459648020/unknown.png").into(holder.conditionTV);
-        }
-        else if (holder.condition.equals("Fog")){
-            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963843408378597386/unknown.png").into(holder.conditionTV);
-        }
-        else if (holder.condition.equals("Fog")){
-            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963844259465805855/unknown.png").into(holder.conditionTV);
-        }
+        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/all/" + convertConditionArrayToString + ".png").into(holder.conditionTV);
+
+//        if (holder.condition.equals("Cloudy")){
+//            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804673276534814/unknown.png").into(holder.conditionTV);
+//        }
+//        else if (holder.condition.equals("Overcast")){
+//            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804852088102922/unknown.png").into(holder.conditionTV);
+//        }
+//        else if (holder.condition.equals("Mist")){
+//            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963821765321166918/unknown.png").into(holder.conditionTV);
+//        }
+//        else if (holder.condition.equals("Patchy freezing drizzle possible")){
+//            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963838958251417740/unknown.png").into(holder.conditionTV);
+//        }
+//        else if (holder.condition.equals("Thundery outbreaks possible")){
+//            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963839740900171776/unknown.png").into(holder.conditionTV);
+//        }
+//        else if (holder.condition.equals("Blowing snow")){
+//            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963841176576860180/unknown.png").into(holder.conditionTV);
+//        }
+//        else if (holder.condition.equals("Blizzard")){
+//            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963842282459648020/unknown.png").into(holder.conditionTV);
+//        }
+//        else if (holder.condition.equals("Fog")){
+//            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963843408378597386/unknown.png").into(holder.conditionTV);
+//        }
+//        else if (holder.condition.equals("Fog")){
+//            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963844259465805855/unknown.png").into(holder.conditionTV);
+//        }
 
         //Picasso.get().load("http:".concat(modal.getIcon())).into(holder.conditionTV);
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");

@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherApp"
         android:usesCleartextTraffic="true"
+        android:largeHeap="true"
         >
         <activity
             android:name=".SearchActivity"
