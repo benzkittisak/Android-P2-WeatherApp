@@ -178,77 +178,16 @@ public class MainActivity extends AppCompatActivity {
                     if (isDay == 1) { //เป็นกลางวัน
 //                        // พื้นหลัง กลางวัน
                         Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963789850983694336/sky-2021-08-30-06-22-08-utc.jpg").into(backIV);
-                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png").into(iconIV);
+                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png").fit().centerInside().into(iconIV);
 
-//                        // Icon สภาพอากาศ ตอนกลางวัน
-//                        if (condition.equals("Sunny")) {
-//                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963098637125185677/unknown.png").into(iconIV);
-//                        }
-//                        else if (condition.equals("Partly cloudy")){
-//                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804344464076820/unknown.png").into(iconIV);
-//                        }
-//                        else if (condition.equals("Patchy rain possible")){
-//                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963830564580905010/unknown.png").into(iconIV);
-//                        }
-//                        else if (condition.equals("Patchy snow possible")){
-//                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833443744116786/unknown.png").into(iconIV);
-//                        }
-//                        else if (condition.equals("Patchy sleet possible")){
-//                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963834934227783690/patchysleetpossible.png").into(iconIV);
-//                        }
                     } else { //เป็นกลางคืน
                         // พื้นหลัง กลางคืน
                         Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963120111177322496/night-sky-of-swiss-alps-2021-09-02-02-03-40-utc.jpg").into(backIV);
                         idRLHome.setBackgroundResource(R.drawable.nightbackgroundindex);
                         Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + ".png").into(iconIV);
 
-//                         Icon สภาพอากาศ ตอนกลางคืน
-//                        if (condition.equals("Clear")) {
-//                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963119007106465863/unknown.png").into(iconIV);
-//                        }
-//                        else if (condition.equals("Partly cloudy")){
-//                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804499275808788/unknown.png").into(iconIV);
-//                        }
-//                        else if (condition.equals("Patchy rain possible")){
-//                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833412886614037/unknown.png").into(iconIV);
-//                        }
-//                        else if (condition.equals("Patchy snow possible")){
-//                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833460487749693/unknown.png").into(iconIV);
-//                        }
-//                        else if (condition.equals("Patchy sleet possible")){
-//                            Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963834933904809984/nightpatchysleetpossible.png").into(iconIV);
-//                        }
                     }
-                    Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/all/" + convertConditionArrayToString + ".png").into(iconIV);
-
-//                    if (condition.equals("Cloudy")){
-//                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804673276534814/unknown.png").into(iconIV);
-//                    }
-//                    else if (condition.equals("Overcast")){
-//                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804852088102922/unknown.png").into(iconIV);
-//                    }
-//                    else if (condition.equals("Mist")){
-//                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963821765321166918/unknown.png").into(iconIV);
-//                    }
-//                    else if (condition.equals("Patchy freezing drizzle possible")){
-//                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963838958251417740/unknown.png").into(iconIV);
-//                    }
-//                    else if (condition.equals("Thundery outbreaks possible")){
-//                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963839740900171776/unknown.png").into(iconIV);
-//                    }
-//                    else if (condition.equals("Blowing snow")){
-//                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963841176576860180/unknown.png").into(iconIV);
-//                    }
-//                    else if (condition.equals("Blizzard")){
-//                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963842282459648020/unknown.png").into(iconIV);
-//                    }
-//                    else if (condition.equals("Fog")){
-//                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963843408378597386/unknown.png").into(iconIV);
-//                    }
-//                    else if (condition.equals("Fog")){
-//                        Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963844259465805855/unknown.png").into(iconIV);
-//                    }
-
+//
                     conditionTV.setText(condition);
 
                     String feelLike = response.getJSONObject("current").getString("feelslike_c");
