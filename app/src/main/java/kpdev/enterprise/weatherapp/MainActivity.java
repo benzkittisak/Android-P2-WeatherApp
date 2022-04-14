@@ -118,10 +118,6 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permission granted!!", Toast.LENGTH_SHORT).show();
                 getWeatherForCurrentLocation();
-            } else {
-                Toast.makeText(this, "Please provide the permissions", Toast.LENGTH_SHORT).show();
-                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION , Manifest.permission.ACCESS_COARSE_LOCATION},PERMISSION_CODE);
-                return;
             }
         }
     }
