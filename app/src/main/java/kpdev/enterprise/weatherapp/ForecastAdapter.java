@@ -45,7 +45,11 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         ForecastModal modal = forecastDay.get(position);
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat output = new SimpleDateFormat("EEE");
-        Picasso.get().load("http:".concat(modal.getIcon())).into(holder.imgDay);
+        holder.iconimg = modal.getIcon();
+        String convertConditionFormatToArray[] = holder.iconimg.split("\\ " , -1);
+        String convertConditionArrayToString = String.join("" , convertConditionFormatToArray).toLowerCase(Locale.ROOT);
+
+        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png").into(holder.imgDay);
 
         holder.temperatureTV.setText(modal.getTemperature());
 
@@ -66,6 +70,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
 
         private TextView tvDay , temperatureTV  ;
         private ImageView imgDay ;
+        private String iconimg;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

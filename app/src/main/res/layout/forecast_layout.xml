@@ -12,6 +12,7 @@
         android:id="@+id/tvDay"
         android:layout_width="20dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_weight="1"
         android:capitalize="words"
         android:text="TextView"
@@ -20,8 +21,9 @@
 
     <ImageView
         android:id="@+id/imgDay"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
         android:layout_weight="1"
         app:srcCompat="@drawable/ic_launcher_background" />
 
@@ -29,6 +31,7 @@
         android:id="@+id/tvDayTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_weight="1"
         android:gravity="right"
         android:text="TextView"
