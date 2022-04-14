@@ -43,23 +43,7 @@ public class WeatherRVAdapter  extends RecyclerView.Adapter<WeatherRVAdapter.Vie
         holder.temperatureTV.setText(modal.getTemperature()+"°c");
 
         if (holder.isDay == 1) { //เป็นกลางวัน
-
-            // Icon สภาพอากาศ ตอนกลางวัน
-            if (holder.condition.equals("Sunny")) {
-                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963098637125185677/unknown.png").into(holder.conditionTV);
-            }
-            else if (holder.condition.equals("Partly cloudy")){
-                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963804344464076820/unknown.png").into(holder.conditionTV);
-            }
-            else if (holder.condition.equals("Patchy rain possible")){
-                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963830564580905010/unknown.png").into(holder.conditionTV);
-            }
-            else if (holder.condition.equals("Patchy snow possible")){
-                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963833443744116786/unknown.png").into(holder.conditionTV);
-            }
-            else if (holder.condition.equals("Patchy sleet possible")){
-                Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963834934227783690/patchysleetpossible.png").into(holder.conditionTV);
-            }
+            Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + holder.condition + ".png").into(holder.conditionTV);
         } else { //เป็นกลางคืน
             // Icon สภาพอากาศ ตอนกลางคืน
             if (holder.condition.equals("Clear")) {
