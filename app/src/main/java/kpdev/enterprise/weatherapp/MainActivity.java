@@ -174,11 +174,10 @@ public class MainActivity extends AppCompatActivity {
                     String convertConditionArrayToString = String.join("" , convertConditionFormatToArray).toLowerCase(Locale.ROOT);
                     // ใช้ตัว Picasso ไปเซ็ต icon (โหลดจาก cloud server ของแอปที่ชื่อว่า discord) โดยแบ่งเป็นกลางวันกลางคืน
                     // ถ้าเมืองนั้นเป็นกลางวันจะให้เซ็ตพื้นหลังเป็นรูปอะไร ถ้ากลางคืนจะให้เซ็ตเป็นรูปอะไร
-                    Log.d("ICON" , "https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png");
                     if (isDay == 1) { //เป็นกลางวัน
 //                        // พื้นหลัง กลางวัน
                         Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963789850983694336/sky-2021-08-30-06-22-08-utc.jpg").into(backIV);
-                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png").fit().centerInside().into(iconIV);
+                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png").into(iconIV);
 
                     } else { //เป็นกลางคืน
                         // พื้นหลัง กลางคืน
