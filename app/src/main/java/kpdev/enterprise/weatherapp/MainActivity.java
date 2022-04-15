@@ -64,9 +64,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getWindow().setNavigationBarColor(ContextCompat.getColor(this , R.color.black));
-
         setContentView(R.layout.activity_main);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -149,8 +146,13 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     // ดึงข้อมูลอุณหภูมิจากข้อมูลที่มันตอบกลับมา
                     temperatureTV.setText(weatherInfo.getTemperature() + "°c");
-
                     cityNameTV.setText(weatherInfo.getCity());
+                    conditionTV.setText(weatherInfo.getConditionText());
+                    feelLikeTV.setText(weatherInfo.getFeelLike() + "°c");
+                    pressureTV.setText(weatherInfo.getPressSure() + " hPa");
+                    sunsetTV.setText(weatherInfo.getSunsetData());
+                    sunriseTV.setText("Sunrise : " + weatherInfo.getSunriseData());
+                    rainFallTV.setText(weatherInfo.getRainFall() + '%');
 
                     if (weatherInfo.getIsDay() == 1) { //เป็นกลางวัน
 //                  พื้นหลัง กลางวัน
@@ -162,17 +164,6 @@ public class MainActivity extends AppCompatActivity {
                         idRLHome.setBackgroundResource(R.drawable.nightbackgroundindex);
                         Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + weatherInfo.getCondition() + ".png").into(iconIV);
                     }
-                    conditionTV.setText(weatherInfo.getConditionText());
-
-                    feelLikeTV.setText(weatherInfo.getFeelLike() + "°c");
-
-                    pressureTV.setText(weatherInfo.getPressSure() + " hPa");
-
-                    sunsetTV.setText(weatherInfo.getSunsetData());
-
-                    sunriseTV.setText("Sunrise : " + weatherInfo.getSunriseData());
-
-                    rainFallTV.setText(weatherInfo.getRainFall() + '%');
 
                     for (int i = 0; i < weatherInfo.getHourArray().length(); i++) {
                         JSONObject hourObject = weatherInfo.getHourArray().getJSONObject(i);
@@ -200,15 +191,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getWeatherForecast(String latitude , String longitude ,String cityName ) {
-        // เรียกใช้งาน API
-        // กำหนด path ของ API
         String url ;
         if(cityName == null)
             url = "http://api.weatherapi.com/v1/forecast.json?key=102deb83cf914ed596273713220804&q=" + latitude + "," + longitude + "&days=10&aqi=no&alerts=no";
         else
             url = "http://api.weatherapi.com/v1/forecast.json?key=102deb83cf914ed596273713220804&q=" + cityName + "&days=10&aqi=no&alerts=no";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-
         // คือข้อมูลที่ตอบกลับมามันเป็น JSON ฉะนั้นเราก็จะขอข้อมูลที่เป็น JSON มาใช้
         JsonObjectRequest jsoneObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -252,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_right_menu, menu);
-
         return true;
     }
 
@@ -265,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
             Intent searchIntent = new Intent(this, SearchActivity.class);
             startActivity(searchIntent);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
