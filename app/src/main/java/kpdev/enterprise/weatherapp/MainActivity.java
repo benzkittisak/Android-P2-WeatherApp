@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
         else
             url = "http://api.weatherapi.com/v1/forecast.json?key=102deb83cf914ed596273713220804&q=" + cityName + "&days=1&aqi=no&alerts=no";
 
-//        cityNameTV.setText(cityName);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         // คือข้อมูลที่ตอบกลับมามันเป็น JSON ฉะนั้นเราก็จะขอข้อมูลที่เป็น JSON มาใช้
@@ -146,57 +145,37 @@ public class MainActivity extends AppCompatActivity {
 //                // ให้ปิดตัวหน้าจอ Loading
                 // เคลียร์ค่าในตัว Array ที่ใช้แสดงข้อมูลพยากรณ์อากาศรายชั่วโมง
                 weatherRVModalArrayList.clear();
-
+                WeatherInfo weatherInfo = new WeatherInfo(response);
                 try {
                     // ดึงข้อมูลอุณหภูมิจากข้อมูลที่มันตอบกลับมา
-                    String temperature = response.getJSONObject("current").getString("temp_c");
-                    temperatureTV.setText(temperature + "°c");
+                    temperatureTV.setText(weatherInfo.getTemperature() + "°c");
 
-                    String city = response.getJSONObject("location").getString("name");
-                    cityNameTV.setText(city);
-                    // ดึงข้อมูลว่าตอนนี้กลางวันหรือกลางคืน
-                    int isDay = response.getJSONObject("current").getInt("is_day");
-                    // รับข้อมูลสภาพอากาศ
-                    String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
-                    String convertConditionFormatToArray[] = condition.split("\\ " , -1);
-                    String convertConditionArrayToString = String.join("" , convertConditionFormatToArray).toLowerCase(Locale.ROOT);
-                    // ใช้ตัว Picasso ไปเซ็ต icon (โหลดจาก cloud server ของแอปที่ชื่อว่า discord) โดยแบ่งเป็นกลางวันกลางคืน
-                    // ถ้าเมืองนั้นเป็นกลางวันจะให้เซ็ตพื้นหลังเป็นรูปอะไร ถ้ากลางคืนจะให้เซ็ตเป็นรูปอะไร
+                    cityNameTV.setText(weatherInfo.getCity());
 
-                    if (isDay == 1) { //เป็นกลางวัน
+                    if (weatherInfo.getIsDay() == 1) { //เป็นกลางวัน
 //                  พื้นหลัง กลางวัน
                         Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963789850983694336/sky-2021-08-30-06-22-08-utc.jpg").into(backIV);
-                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + convertConditionArrayToString + ".png").into(iconIV);
+                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/day/" + weatherInfo.getCondition() + ".png").into(iconIV);
                     } else { //เป็นกลางคื
                         // พื้นหลัง กลางคืน
                         Picasso.get().load("https://cdn.discordapp.com/attachments/950973417216180244/963120111177322496/night-sky-of-swiss-alps-2021-09-02-02-03-40-utc.jpg").into(backIV);
                         idRLHome.setBackgroundResource(R.drawable.nightbackgroundindex);
-                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + convertConditionArrayToString + ".png").into(iconIV);
+                        Picasso.get().load("https://www.thanomsri.ac.th/v2.2/weather/night/" + weatherInfo.getCondition() + ".png").into(iconIV);
                     }
-                    conditionTV.setText(condition);
+                    conditionTV.setText(weatherInfo.getConditionText());
 
-                    String feelLike = response.getJSONObject("current").getString("feelslike_c");
-                    feelLikeTV.setText(feelLike + "°c");
+                    feelLikeTV.setText(weatherInfo.getFeelLike() + "°c");
 
-                    String pressSure = response.getJSONObject("current").getString("pressure_mb");
-                    pressureTV.setText(pressSure + " hPa");
+                    pressureTV.setText(weatherInfo.getPressSure() + " hPa");
 
-                    JSONObject forecastObject = response.getJSONObject("forecast");
-                    JSONObject forecastO = forecastObject.getJSONArray("forecastday").getJSONObject(0);
+                    sunsetTV.setText(weatherInfo.getSunsetData());
 
-                    String sunsetData = forecastO.getJSONObject("astro").getString("sunset");
-                    sunsetTV.setText(sunsetData);
+                    sunriseTV.setText("Sunrise : " + weatherInfo.getSunriseData());
 
-                    String sunriseData = forecastO.getJSONObject("astro").getString("sunrise");
-                    sunriseTV.setText("Sunrise : " + sunriseData);
+                    rainFallTV.setText(weatherInfo.getRainFall() + '%');
 
-                    JSONArray hourArray = forecastO.getJSONArray("hour");
-
-                    String rainFall = hourArray.getJSONObject(0).getString("chance_of_rain");
-                    rainFallTV.setText(rainFall + '%');
-
-                    for (int i = 0; i < hourArray.length(); i++) {
-                        JSONObject hourObject = hourArray.getJSONObject(i);
+                    for (int i = 0; i < weatherInfo.getHourArray().length(); i++) {
+                        JSONObject hourObject = weatherInfo.getHourArray().getJSONObject(i);
                         String time = hourObject.getString("time");
                         String temper = hourObject.getString("temp_c");
                         String img = hourObject.getJSONObject("condition").getString("icon");
@@ -220,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(jsoneObjectRequest);
     }
 
-    private void getWeatherForecast(String latitude , String longitude , String cityName) {
+    private void getWeatherForecast(String latitude , String longitude ,String cityName ) {
         // เรียกใช้งาน API
         // กำหนด path ของ API
         String url ;
