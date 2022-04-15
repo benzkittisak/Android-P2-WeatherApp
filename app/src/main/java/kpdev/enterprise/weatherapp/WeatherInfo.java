@@ -15,16 +15,11 @@ public class WeatherInfo {
     private String condition;
     private String conditionText;
     private String feelLike;
-
-
-
     private  String pressSure;
     private String sunsetData;
     private String sunriseData;
     private String rainFall;
     private JSONArray hourArray;
-
-
 
     public WeatherInfo(JSONObject response) {
         try{
