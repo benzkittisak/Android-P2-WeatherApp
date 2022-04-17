@@ -21,9 +21,18 @@ public class WeatherInfo {
     private String rainFall;
     private JSONArray hourArray;
 
-    public WeatherInfo(JSONObject response) {
+    public WeatherInfo(JSONObject response , String UNIT) {
         try{
-            this.temperature = response.getJSONObject("current").getString("temp_c");
+
+            if(UNIT.equals("°C")){
+                this.temperature = response.getJSONObject("current").getString("temp_c");
+                this.feelLike = response.getJSONObject("current").getString("feelslike_c");
+            }
+            else {
+                this.temperature = response.getJSONObject("current").getString("temp_f");
+                this.feelLike = response.getJSONObject("current").getString("feelslike_f");
+            }
+
             this.city = response.getJSONObject("location").getString("name");
             this.isDay = response.getJSONObject("current").getInt("is_day");
 
@@ -31,7 +40,6 @@ public class WeatherInfo {
             this.conditionText = response.getJSONObject("current").getJSONObject("condition").getString("text");
             String convertConditionFormatToArray[] = this.conditionText.split("\\ " , -1);
             this.condition = String.join("" , convertConditionFormatToArray).toLowerCase(Locale.ROOT);
-            this.feelLike = response.getJSONObject("current").getString("feelslike_c");
             this.pressSure = response.getJSONObject("current").getString("pressure_mb");
 
             JSONObject forecastObject = response.getJSONObject("forecast");

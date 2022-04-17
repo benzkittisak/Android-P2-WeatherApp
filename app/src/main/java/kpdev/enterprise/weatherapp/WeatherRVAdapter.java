@@ -1,6 +1,7 @@
 package kpdev.enterprise.weatherapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -24,9 +26,16 @@ public class WeatherRVAdapter  extends RecyclerView.Adapter<WeatherRVAdapter.Vie
     private Context context;
     private ArrayList<WeatherRVModal> weatherRVModalList;
 
+    SharedPreferences setting;
+    String UNIT;
+
     public WeatherRVAdapter(Context context, ArrayList<WeatherRVModal> weatherRVModalList) {
         this.context = context;
         this.weatherRVModalList = weatherRVModalList;
+
+        // Load setting from sharedPreferences
+        setting = PreferenceManager.getDefaultSharedPreferences(context);
+
     }
 
     @NonNull
@@ -38,10 +47,16 @@ public class WeatherRVAdapter  extends RecyclerView.Adapter<WeatherRVAdapter.Vie
 
     @Override
     public void onBindViewHolder(@NonNull WeatherRVAdapter.ViewHolder holder, int position) {
+
         WeatherRVModal modal = weatherRVModalList.get(position);
+        UNIT = setting.getString("UNIT" , "°C");
         holder.isDay = modal.getIsDay();
         holder.condition = modal.getCondition();
-        holder.temperatureTV.setText(modal.getTemperature()+"°c");
+        if(UNIT.equals("°C")){
+            holder.temperatureTV.setText(modal.getTemperature()+"°C");
+        } else {
+            holder.temperatureTV.setText(modal.getTemperature()+"°F");
+        }
         String convertConditionFormatToArray[] = holder.condition.split("\\ " , -1);
         String convertConditionArrayToString = String.join("" , convertConditionFormatToArray).toLowerCase(Locale.ROOT);
 

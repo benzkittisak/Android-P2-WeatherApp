@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="General Settings">
+
+        <ListPreference
+            app:defaultValue="°C"
+            app:entries="@array/reply_entries"
+            app:entryValues="@array/reply_values"
+            app:key="UNIT"
+            app:title="UNIT"
+            app:useSimpleSummaryProvider="true"
+            android:iconSpaceReserved="false"
+            />
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="About">
+        <Preference
+            app:key="about"
+            app:summary="แอปพลิเคชันนี้สร้างขึ้นมาเพื่อเป็นส่วนหนึ่งของวิชา Mobile application development"
+            />
+    </PreferenceCategory>
+
+</PreferenceScreen>

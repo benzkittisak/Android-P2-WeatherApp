@@ -9,14 +9,13 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/btnSetting"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:background="@null"
-            android:onClick="onClickSetting"
-            android:src="@drawable/ic_settings_light_24dp" />
+
+            android:text="@string/title_activity_settings"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
     </LinearLayout>
 
 </LinearLayout>

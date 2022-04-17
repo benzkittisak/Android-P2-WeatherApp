@@ -6,22 +6,26 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView backIV, iconIV;
     private RelativeLayout idRLHome;
 
-
     private ArrayList<WeatherRVModal> weatherRVModalArrayList;
     private ArrayList<ForecastModal> forecastModalList;
 
@@ -56,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
 
     public LocationManager locationManager;
     public LocationListener locationListener;
+
+    private ImageButton btnSetting;
+
+    //Setting section
+    private SharedPreferences setting;
+    String UNIT;
 
     public int PERMISSION_CODE = 1;
     private static final int GPS_TIME_INTERVAL =5000;
@@ -84,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         rainFallTV = findViewById(R.id.idTVRain);
         weatherRV = findViewById(R.id.idRVWeather);
         forecaseRV = findViewById(R.id.idRVForecastFuture);
-
+        btnSetting = findViewById(R.id.btnSetting);
         backIV = findViewById(R.id.idIVBackground);
         iconIV = findViewById(R.id.idIVIcon);
         feelLikeTV = findViewById(R.id.idTVFeelLike);
@@ -109,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_CODE);
         }
 
+        // ใช้งานตัว setting
+        setting = PreferenceManager.getDefaultSharedPreferences(this);
+
     }
 
     @Override
@@ -123,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getWeatherInfo(String latitude , String longitude , String cityName) {
+        UNIT = setting.getString("UNIT" , "°C");
         // เรียกใช้งาน API
         // กำหนด path ของ API
         String url ;
@@ -142,13 +155,18 @@ public class MainActivity extends AppCompatActivity {
 //                // ให้ปิดตัวหน้าจอ Loading
                 // เคลียร์ค่าในตัว Array ที่ใช้แสดงข้อมูลพยากรณ์อากาศรายชั่วโมง
                 weatherRVModalArrayList.clear();
-                WeatherInfo weatherInfo = new WeatherInfo(response);
+                WeatherInfo weatherInfo = new WeatherInfo(response , UNIT);
                 try {
                     // ดึงข้อมูลอุณหภูมิจากข้อมูลที่มันตอบกลับมา
-                    temperatureTV.setText(weatherInfo.getTemperature() + "°c");
+                    if(UNIT.equals("°C")){
+                        temperatureTV.setText(weatherInfo.getTemperature() + "°C");
+                        feelLikeTV.setText(weatherInfo.getFeelLike() + "°C");
+                    }else {
+                        temperatureTV.setText(weatherInfo.getTemperature() + "°F");
+                        feelLikeTV.setText(weatherInfo.getFeelLike() + "°F");
+                    }
                     cityNameTV.setText(weatherInfo.getCity());
                     conditionTV.setText(weatherInfo.getConditionText());
-                    feelLikeTV.setText(weatherInfo.getFeelLike() + "°c");
                     pressureTV.setText(weatherInfo.getPressSure() + " hPa");
                     sunsetTV.setText(weatherInfo.getSunsetData());
                     sunriseTV.setText("Sunrise : " + weatherInfo.getSunriseData());
@@ -168,7 +186,12 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < weatherInfo.getHourArray().length(); i++) {
                         JSONObject hourObject = weatherInfo.getHourArray().getJSONObject(i);
                         String time = hourObject.getString("time");
-                        String temper = hourObject.getString("temp_c");
+                        String temper = "";
+                        if(UNIT.equals("°C")){
+                            temper = hourObject.getString("temp_c");
+                        } else {
+                            temper = hourObject.getString("temp_f");
+                        }
                         String img = hourObject.getJSONObject("condition").getString("icon");
                         String con = hourObject.getJSONObject("condition").getString("text");
                         int is_day = hourObject.getInt("is_day");
@@ -191,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getWeatherForecast(String latitude , String longitude ,String cityName ) {
+        UNIT = setting.getString("UNIT" , "°C");
         String url ;
         if(cityName == null)
             url = "http://api.weatherapi.com/v1/forecast.json?key=102deb83cf914ed596273713220804&q=" + latitude + "," + longitude + "&days=10&aqi=no&alerts=no";
@@ -210,9 +234,18 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject dataObject = forecast.getJSONObject(i);
                         JSONArray hourArray = dataObject.getJSONArray("hour");
                         String day = dataObject.getString("date");
-                        String maxTemp = dataObject.getJSONObject("day").getString("maxtemp_c");
-                        String minTemp = dataObject.getJSONObject("day").getString("mintemp_c");
-                        String temperature = minTemp + "°c / " + maxTemp + "°c";
+                        String maxTemp = "" , minTemp = "" ;
+
+                        if(UNIT.equals("°C")){
+                             maxTemp = dataObject.getJSONObject("day").getString("maxtemp_c");
+                             minTemp = dataObject.getJSONObject("day").getString("mintemp_c");
+                        } else {
+                            maxTemp = dataObject.getJSONObject("day").getString("maxtemp_f");
+                            minTemp = dataObject.getJSONObject("day").getString("mintemp_f");
+                        }
+
+
+                        String temperature = minTemp + UNIT +" / " + maxTemp + UNIT;
                         String img = dataObject.getJSONObject("day").getJSONObject("condition").getString("text");
 
                         // เพิ่มข้อมูลเข้าไปในตัว Adapter
@@ -273,6 +306,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
+    }
+
+    public void onClickSetting (View v){
+        Intent settingActivity = new Intent(this , SettingActivity.class);
+        startActivity(settingActivity);
     }
 
     public void getWeatherForCurrentLocation() {
